@@ -1,0 +1,30 @@
+# backend/src/main/resources/application.yaml
+server:
+    port: 5000
+
+spring:
+    application:
+        name: wms-backend
+    
+    # Включаем нативную поддержку виртуальных потоков Java 25
+    threads:
+        virtual:
+            enabled: true
+
+    # Настройки подключения к базе данных (будут переопределяться через Docker Compose)
+    datasource:
+        url: jdbc:postgresql://localhost:5432/wms_parts_db
+        username: wms_admin
+        password: super_secret_password_2026
+        driver-class-name: org.postgresql.Driver
+
+    # Настройки Hibernate ORM
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            # update автоматически создает и обновляет таблицы в базе данных при изменении Java-кода
+            ddl-auto: update
+        show-sql: true
+        properties:
+            hibernate:
+                format-sql: true

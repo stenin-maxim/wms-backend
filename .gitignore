@@ -1,0 +1,26 @@
+# --- Скомпилированный код и сборка ---
+target/
+*.jar
+*.war
+*.ear
+*.class
+
+*.log
+logs/
+
+# --- Файлы настроек сред разработки (IDE) ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.factorypath
+
+# --- Настройки VS Code для Java ---
+.vscode/
+.metadata/
+
+# --- Кэш и временные файлы Maven Wrapper ---
+.mvn/wrapper/maven-wrapper.jar

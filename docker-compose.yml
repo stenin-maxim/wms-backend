@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+    # --- СЕРВИС БАЗЫ ДАННЫХ ---
+    wms-db:
+        image: postgres:16-alpine
+        container_name: wms_postgres_db
+        environment:
+            POSTGRES_DB: wms_parts_db
+            POSTGRES_USER: wms_admin
+            POSTGRES_PASSWORD: super_secret_password_2026
+        ports:
+            - "5432:5432"
+        volumes:
+            # Сохраняем данные базы на жестком диске сервера
+            - pgdata:/var/lib/postgresql/data
+        networks:
+            - wms-network
+
+    # --- СЕРВИС SPRING BOOT БЭКЕНДА ---
+    wms-backend:
+        build: .
+        container_name: wms_spring_backend
+        ports:
+            - "5000:5000"
+        environment:
+            # Связываем Spring Boot с базой данных внутри сети Docker по имени контейнера
+            SPRING_DATASOURCE_URL: jdbc:postgresql://wms-db:5432/wms_parts_db
+            SPRING_DATASOURCE_USERNAME: wms_admin
+            SPRING_DATASOURCE_PASSWORD: super_secret_password_2026
+            SPRING_JPA_HIBERNATE_DDL_AUTO: update
+        depends_on:
+            # Бэкенд начнет запускаться только ПОСЛЕ того, как поднимется база данных
+            - wms-db
+        networks:
+            - wms-network
+
+volumes:
+    pgdata:
+
+networks:
+    wms-network:
+        driver: bridge
