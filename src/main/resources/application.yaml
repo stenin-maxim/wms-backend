@@ -13,7 +13,7 @@ spring:
 
     # Настройки подключения к базе данных (будут переопределяться через Docker Compose)
     datasource:
-        url: jdbc:postgresql://localhost:5432/wms_parts_db
+        url: jdbc:postgresql://localhost:5432/wms_db
         username: wms_admin
         password: super_secret_password_2026
         driver-class-name: org.postgresql.Driver
