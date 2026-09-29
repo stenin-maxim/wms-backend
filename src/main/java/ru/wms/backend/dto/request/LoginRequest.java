@@ -1,4 +1,4 @@
-package ru.wms.backend.dto;
+package ru.wms.backend.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

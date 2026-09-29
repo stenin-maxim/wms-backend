@@ -20,8 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ru.wms.backend.dto.AuthResponse;
-import ru.wms.backend.dto.LoginRequest;
-import ru.wms.backend.dto.RegisterCompanyRequest;
+import ru.wms.backend.dto.request.LoginRequest;
+import ru.wms.backend.dto.request.RegisterCompanyRequest;
 import ru.wms.backend.enums.Role;
 import ru.wms.backend.enums.UserStatus;
 import ru.wms.backend.model.Company;
