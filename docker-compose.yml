@@ -1,12 +1,11 @@
 version: '3.8'
-
 services:
     # --- СЕРВИС БАЗЫ ДАННЫХ ---
     wms-db:
         image: postgres:16-alpine
         container_name: wms_postgres_db
         environment:
-            POSTGRES_DB: wms_parts_db
+            POSTGRES_DB: wms_db
             POSTGRES_USER: wms_admin
             POSTGRES_PASSWORD: super_secret_password_2026
         ports:
@@ -14,24 +13,34 @@ services:
         volumes:
             # Сохраняем данные базы на жестком диске сервера
             - pgdata:/var/lib/postgresql/data
+        # проверять работоспособность базы данны
+        healthcheck:
+            test: ["CMD", "pg_isready", "-d", "wms_db", "-U", "wms_admin"]
+            timeout: 5s
+            retries: 5
+            start_period: 10s
         networks:
             - wms-network
 
     # --- СЕРВИС SPRING BOOT БЭКЕНДА ---
-    wms-backend:
+    wms-spring:
         build: .
-        container_name: wms_spring_backend
+        container_name: wms_spring
         ports:
             - "5000:5000"
         environment:
             # Связываем Spring Boot с базой данных внутри сети Docker по имени контейнера
-            SPRING_DATASOURCE_URL: jdbc:postgresql://wms-db:5432/wms_parts_db
+            SPRING_DATASOURCE_URL: jdbc:postgresql://wms-db:5432/wms_db
             SPRING_DATASOURCE_USERNAME: wms_admin
             SPRING_DATASOURCE_PASSWORD: super_secret_password_2026
             SPRING_JPA_HIBERNATE_DDL_AUTO: update
+        volumes:
+            - ./target/classes:/app/target/classes:rw
+            - ./src/main/resources:/app/src/main/resources:rw
+        command: ["java", "-cp", "app.jar", "-Dloader.path=target/classes", "org.springframework.boot.loader.launch.PropertiesLauncher"]
         depends_on:
-            # Бэкенд начнет запускаться только ПОСЛЕ того, как поднимется база данных
-            - wms-db
+            wms-db:
+                condition: service_healthy
         networks:
             - wms-network
 
