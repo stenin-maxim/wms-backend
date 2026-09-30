@@ -74,7 +74,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            // В случае битого или просроченного токена просто не авторизуем запрос (Spring вернет 403 Forbidden)
             logger.error("Не удалось обработать JWT токен", e);
         }
 
