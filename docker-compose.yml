@@ -35,9 +35,7 @@ services:
             SPRING_DATASOURCE_PASSWORD: super_secret_password_2026
             SPRING_JPA_HIBERNATE_DDL_AUTO: update
         volumes:
-            - ./target/classes:/app/target/classes:rw
-            - ./src/main/resources:/app/src/main/resources:rw
-        command: ["java", "-cp", "app.jar", "-Dloader.path=target/classes", "org.springframework.boot.loader.launch.PropertiesLauncher"]
+            - .:/var/www/wms/backend/api:rw
         depends_on:
             wms-db:
                 condition: service_healthy
