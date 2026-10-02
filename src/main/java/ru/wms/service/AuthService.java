@@ -5,8 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.wms.dto.request.LoginRequest;
-import ru.wms.dto.request.RegisterCompanyRequest;
+import ru.wms.dto.request.auth.LoginRequest;
+import ru.wms.dto.request.auth.RegisterCompanyRequest;
 import ru.wms.dto.response.AuthResponse;
 import ru.wms.enums.Role;
 import ru.wms.enums.UserStatus;
@@ -19,7 +19,6 @@ import ru.wms.security.JwtService;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

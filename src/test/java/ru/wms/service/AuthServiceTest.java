@@ -19,8 +19,8 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import ru.wms.dto.request.LoginRequest;
-import ru.wms.dto.request.RegisterCompanyRequest;
+import ru.wms.dto.request.auth.LoginRequest;
+import ru.wms.dto.request.auth.RegisterCompanyRequest;
 import ru.wms.dto.response.AuthResponse;
 import ru.wms.enums.Role;
 import ru.wms.enums.UserStatus;
@@ -33,7 +33,6 @@ import ru.wms.security.JwtService;
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("null")
 public class AuthServiceTest {
-
     @Mock
     private CompanyRepository companyRepository;
 

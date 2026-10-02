@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import ru.wms.dto.request.CreateEmployeeRequest;
+import ru.wms.dto.request.employee.CreateEmployeeRequest;
 import ru.wms.dto.response.AuthResponse.UserProfileDto;
 import ru.wms.enums.Role;
 import ru.wms.enums.UserStatus;
@@ -20,7 +20,6 @@ import ru.wms.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
-    
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,7 +47,6 @@ public class EmployeeService {
     @Transactional
     @SuppressWarnings("null")
     public UserProfileDto createEmployee(CreateEmployeeRequest request, Company company) {
-        
         // Запрещаем создавать пользователей с ролью SUPER_ADMIN
         if (request.getRole() == Role.SUPER_ADMIN) {
             throw new IllegalArgumentException("Недопустимая роль для создания сотрудника");
@@ -91,7 +89,6 @@ public class EmployeeService {
      */
     @Transactional
     public UserProfileDto toggleEmployeeStatus(String employeeId, String statusStr, User currentUser) {
-        
         UserStatus newStatus;
         try {
             newStatus = UserStatus.valueOf(statusStr);
@@ -99,6 +96,7 @@ public class EmployeeService {
             throw new IllegalArgumentException("Недопустимый статус сотрудника. Разрешены: ACTIVE, BLOCKED");
         }
         
+        @SuppressWarnings("null")
         User employee = userRepository.findById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException("Сотрудник с указанным ID не найден"));
 
