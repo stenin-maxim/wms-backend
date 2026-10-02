@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ru.wms.dto.request.LoginRequest;
-import ru.wms.dto.request.RegisterCompanyRequest;
+import ru.wms.dto.request.auth.LoginRequest;
+import ru.wms.dto.request.auth.RegisterCompanyRequest;
 import ru.wms.dto.response.AuthResponse;
 import ru.wms.service.AuthService;
 

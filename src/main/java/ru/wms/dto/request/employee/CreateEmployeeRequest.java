@@ -1,14 +1,17 @@
-package ru.wms.dto.request;
+package ru.wms.dto.request.employee;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.wms.enums.Role;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor 
 public class CreateEmployeeRequest {
-
     @NotBlank(message = "Имя сотрудника не может быть пустым")
     private String name;
 

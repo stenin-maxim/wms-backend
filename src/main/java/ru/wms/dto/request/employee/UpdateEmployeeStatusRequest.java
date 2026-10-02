@@ -1,11 +1,14 @@
-package ru.wms.dto.request;
+package ru.wms.dto.request.employee;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class UpdateStatusRequest {
-    
+@NoArgsConstructor
+@AllArgsConstructor 
+public class UpdateEmployeeStatusRequest {
     @NotBlank(message = "ID сотрудника не может быть пустым")
     private String employeeId; 
 

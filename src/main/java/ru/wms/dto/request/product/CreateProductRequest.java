@@ -1,4 +1,4 @@
-package ru.wms.dto.request;
+package ru.wms.dto.request.product;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
