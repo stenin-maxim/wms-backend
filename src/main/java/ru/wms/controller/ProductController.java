@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
@@ -48,7 +48,7 @@ public class ProductController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(
-            @PathVariable("id") @NonNull String  productId,
+            @PathVariable("id") @NonNull String productId,
             @Valid @RequestBody UpdateProductRequest request,
             @AuthenticationPrincipal User currentUser
     ) {

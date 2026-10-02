@@ -11,10 +11,9 @@ import ru.wms.dto.response.AuthResponse;
 import ru.wms.service.AuthService;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    
     private final AuthService authService;
 
     /**
