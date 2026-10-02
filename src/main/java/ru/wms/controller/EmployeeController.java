@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ru.wms.dto.request.CreateEmployeeRequest;
-import ru.wms.dto.request.UpdateStatusRequest;
+import ru.wms.dto.request.employee.CreateEmployeeRequest;
+import ru.wms.dto.request.employee.UpdateEmployeeStatusRequest;
 import ru.wms.dto.response.AuthResponse.UserProfileDto;
 import ru.wms.model.User;
 import ru.wms.service.EmployeeService;
@@ -53,7 +53,7 @@ public class EmployeeController {
      */
     @PatchMapping("/status")
     public ResponseEntity<UserProfileDto> changeEmployeeStatus(
-        @Valid @RequestBody UpdateStatusRequest request,
+        @Valid @RequestBody UpdateEmployeeStatusRequest request,
         @AuthenticationPrincipal User currentUser
     ) {
         UserProfileDto response = employeeService.toggleEmployeeStatus(

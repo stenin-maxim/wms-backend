@@ -1,15 +1,19 @@
 package ru.wms.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.wms.dto.request.CreateProductRequest;
+
+import lombok.RequiredArgsConstructor;
+import ru.wms.dto.request.product.CreateProductRequest;
+import ru.wms.dto.request.product.UpdateProductRequest;
 import ru.wms.dto.response.ProductDto;
 import ru.wms.model.Company;
 import ru.wms.model.Product;
 import ru.wms.repository.ProductRepository;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +35,9 @@ public class ProductService {
      */
     @Transactional
     public ProductDto createProduct(CreateProductRequest request, Company company) {
-
         String cleanSku = request.getSku().toUpperCase().trim();
         String cleanBrand = request.getBrand().trim();
+        String cleanBarcode = request.getBarcode() != null ? request.getBarcode().trim() : null;
 
         // Проверяем, нет ли уже такой детали у этой компании
         if (productRepository.existsBySkuAndBrandAndCompanyId(cleanSku, cleanBrand, company.getId())) {
@@ -43,9 +47,9 @@ public class ProductService {
         // Создаем и сохраняем сущность
         Product product = Product.builder()
             .name(request.getName())
-            .sku(request.getSku().toUpperCase().trim())
-            .brand(request.getBrand().trim())
-            .barcode(request.getBarcode() != null ? request.getBarcode().trim() : null)
+            .sku(cleanSku)
+            .brand(cleanBrand)
+            .barcode(cleanBarcode)
             .company(company)
             .build();
 
@@ -64,4 +68,54 @@ public class ProductService {
             .barcode(product.getBarcode())
             .build();
     }
+
+    /**
+     * Редактирование товара с проверкой SaaS-прав доступа.
+     */
+    @Transactional
+    public ProductDto updateProduct(@NonNull String productId, UpdateProductRequest request, Company company) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new IllegalArgumentException("Товар с указанным ID не найден"));
+
+        // Защита от попыток отредактировать товар чужого склада
+        if (!product.getCompany().getId().equals(company.getId())) {
+            throw new IllegalArgumentException("Доступ запрещен: этот товар принадлежит другой организации");
+        }
+
+        String newSku = request.getSku().toUpperCase().trim();
+        String newBrand = request.getBrand().trim();
+        
+        if (!product.getSku().equals(newSku) || !product.getBrand().equalsIgnoreCase(newBrand)) {
+            if (productRepository.existsBySkuAndBrandAndCompanyId(newSku, newBrand, company.getId())) {
+                throw new IllegalArgumentException("Запчасть с таким артикулом и брендом уже существует в вашем каталоге");
+            }
+        }
+
+        product.setName(request.getName());
+        product.setSku(newSku);
+        product.setBrand(newBrand);
+        product.setBarcode(request.getBarcode() != null ? request.getBarcode().trim() : null);
+
+        Product updatedProduct = productRepository.save(product);
+        return mapToDto(updatedProduct);
+    }
+
+    /**
+     * Удаление товара из каталога номенклатуры.
+     */
+    @Transactional
+    public void deleteProduct(@NonNull String productId, Company company) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Товар с указанным ID не найден"));
+
+        // Защита чужих данных
+        if (!product.getCompany().getId().equals(company.getId())) {
+            throw new IllegalArgumentException("Доступ запрещен: вы не можете удалить товар другой организации");
+        }
+
+        // TODO в будущем: Проверить остатки товара в CellRepository (если > 0, запретить удаление)
+
+        productRepository.delete(product);
+    }
+
 }
